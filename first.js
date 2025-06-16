@@ -1,5 +1,6 @@
 console.log("KG coding is the best.");
 console.log("KG coding is the best.");
+console.log("KG coding is the best.");
 
 const fs = require('fs');
 fs.writeFile('output.txt','Writing File', (err) => {
