@@ -22,6 +22,7 @@ const server = http.createServer((req, res) => {
       res.write('</html>')
       return res.end();
     } else if (req.url.toLowerCase() === '/submit-details' && req.method == 'POST') {
+      
       fs.writeFileSync('user.txt', 'Dharmendra Kumar');
       res.statusCode = 302;
       res.setHeader('Location', '/');
