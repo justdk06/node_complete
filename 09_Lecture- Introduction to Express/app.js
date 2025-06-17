@@ -1,33 +1,49 @@
-// Core Modules
-const http = require('http');
-
-// External Module
 const express = require('express');
-
-// Local Module
-const requestHandler = require('./user')
+const bodyParser = require('body-parser');
 
 const app = express();
 
-app.use((req,  res, next) =>{
-  console.log("Came in first middleware", req.url, req.method);
-  // res.send("<p>Came from First middleware</p>")
+// Middleware to parse form data
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// First Middleware
+app.use((req, res, next) => {
+  console.log("First Dummy Middleware", req.url, req.method);
   next();
 });
 
-app.use((req,  res, next) =>{
-  console.log("Came in another middleware", req.url, req.method);
-  res.send("<p>Came from another middleware</p>")
+// Second Middleware
+app.use((req, res, next) => {
+  console.log("Second Dummy Middleware");
+  next();
 });
 
-app.use("/submit-details", (req, res, next) => {
-  console.log("Came in second middleware", req.url, req.method);
-  res.send("<p>Welcome to complete Coding Nodejs series</p>");
+// GET /
+app.get("/", (req, res, next) => {
+  console.log("Handling / for GET", req.url, req.method);
+  res.send(`<h1>Welcome to complete Coding</h1>`);
 });
 
-const server = http.createServer(app);
+// GET /contact-us
+app.get("/contact-us", (req, res, next) => {
+  console.log("Handling /contact-us", req.url, req.method);
+  res.send(`
+    <h1>Please give your details here</h1>
+    <form action="/contact-us" method="POST">
+      <input type="text" name="name" placeholder="Enter your name" />
+      <input type="email" name="email" placeholder="Enter your Email" />
+      <input type="submit" />
+    </form>
+  `);
+});
 
-const PORT = 3002;
-server.listen(PORT, () => {
+// POST /contact-us
+app.post('/contact-us', (req, res, next) => {
+  console.log("Handling /contact-us for POST", req.url, req.method, req.body);
+  res.send(`<h1>We will contact you shortly, ${req.body.name}</h1>`);
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
   console.log(`Server running on address http://localhost:${PORT}`);
 });
